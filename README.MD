@@ -27,10 +27,10 @@ This repository contains the source code for a real-time chat application built 
 
 
 ```s
-git clone https://github.com/ht21992/live-chat-app.git
+git clone https://github.com/ht21992/Live-Chat-Django-React.git
 ```
 ```s
-cd live-chat-app
+cd Live-Chat-Django-React
 ```
 
 ### Backend Setup:
