@@ -6,6 +6,7 @@ const Contact = ({
   currentColor,
   currentRecipent,
 }) => {
+
   return (
     <div
       onClick={() => connectToFriend(friend)}
@@ -41,8 +42,7 @@ const Contact = ({
             )}
           </div>
           <div className="msg-content">
-            <span className="msg-message">What time was our meet</span>
-            <span className="msg-date">20m</span>
+            <span className="msg-message">{friend.last_message && friend.last_message.message}</span>
           </div>
         </div>
       </div>

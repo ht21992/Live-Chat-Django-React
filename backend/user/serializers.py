@@ -2,7 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from chat.models import Message
 from datetime import datetime
-
+from django.core.serializers import serialize
+import json
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -56,8 +57,17 @@ class LoginSerializer(serializers.Serializer):
 
 class UserGetSerializer(serializers.ModelSerializer):
     unread_messages_count = serializers.SerializerMethodField()
+    last_message = serializers.SerializerMethodField()
     last_seen = serializers.SerializerMethodField()
     online = serializers.SerializerMethodField()
+
+    def get_last_message(self, obj):
+        user_ids = sorted([int(self.context["user"].id), int(obj.id)])
+        last_msg = Message.objects.filter(room__title=f"chat_{user_ids[0]}-{user_ids[1]}").values("content").last()
+        if last_msg:
+            return {"message":last_msg["content"]}
+        else:
+            return None
 
     def get_unread_messages_count(self, obj):
         myself = self.context["user"]
@@ -103,6 +113,7 @@ class UserGetSerializer(serializers.ModelSerializer):
             "unread_messages_count",
             "last_seen",
             "online",
+            "last_message",
         ]
         extra_kwargs = {
             "id": {"read_only": True},
